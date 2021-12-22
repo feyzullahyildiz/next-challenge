@@ -1,0 +1,33 @@
+.content {
+    display: flex;
+    padding: 1rem 0;
+    flex-direction: column;
+    margin: 8px;
+    // cursor: pointer;
+}
+.subtitle {
+    display: flex;
+    font-size: 14px;
+}
+.box {
+    display: flex;
+    background-color: black;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 200px;
+    position: relative;
+    
+    user-select: none;
+    img {
+        max-width: 80% !important;
+    }
+}
+
+.contentTitle {
+    position: absolute;
+    margin: auto;
+    z-index: 2;
+    color: white;
+    font-weight: 400;
+}

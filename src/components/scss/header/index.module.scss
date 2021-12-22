@@ -3,12 +3,18 @@
   text-align: center;
   min-height: 16px;
 }
-
+.mainpage {
+  color: inherit;
+  text-decoration: none;
+}
 .nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: white;
+  h2 {
+    cursor: pointer;
+  }
 }
 .buttons {
   &>* ~ *{

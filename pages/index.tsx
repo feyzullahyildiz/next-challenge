@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Header, Main, Cards, Footer } from "@components/scss";
+import { Header, Main, Footer, TitleHeader, ImageItemBox } from "@components/scss";
+import Link from "next/link";
 
 const Home: React.FC = () => {
   return (
@@ -12,8 +13,24 @@ const Home: React.FC = () => {
       }}
     >
       <Header />
-      <Main />
-      <Cards />
+      <TitleHeader title="Popular Titles" />
+      <Main>
+        <Link href="/series" passHref>
+          <ImageItemBox title="Series"
+            width={80}
+            imageUrl="/icons/camera.png"
+            subtitle="Popular Series"
+          />
+
+        </Link>
+        <Link href="/movies" passHref>
+          <ImageItemBox title="Movie"
+            width={80}
+            imageUrl="/icons/camera.png"
+            subtitle="Popular Movies"
+          />
+        </Link>
+      </Main>
       <Footer />
     </div>
   );

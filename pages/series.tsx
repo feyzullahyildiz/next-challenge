@@ -12,7 +12,7 @@ const Movies: React.FC = () => {
       }}
     >
       <Header />
-      <TitleHeader title="Popular Movies" />
+      <TitleHeader title="Popular Series" />
       <Main></Main>
       <Footer />
     </div>
