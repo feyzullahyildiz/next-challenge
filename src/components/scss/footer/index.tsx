@@ -4,56 +4,76 @@ import Image from "next/image";
 import styles from "./index.module.scss";
 
 export const Footer: React.FC = () => {
-  return (
-    <div className={styles.footer}>
-      <a href="https://github.com/pankod" target="_blank">
-        <Image
-          src="/icons/pankod-icon.svg"
-          alt="pankod"
-          width="140"
-          height="28"
-        />
-      </a>
+  return <div className={styles.footer}>
+    <div className={`${styles.content} container`}>
+      <div className={styles.links}>
+        <span>Home</span>
+        <span className={styles.pipe} />
+        <span>Terms and Conditions</span>
+        <span className={styles.pipe} />
+        <span>Privacy Policy</span>
+        <span className={styles.pipe} />
+        <span>Collection Statement</span>
+        <span className={styles.pipe} />
+        <span>Help</span>
+        <span className={styles.pipe} />
+        <span>Manage Account</span>
+      </div>
+      <div className={styles.copyright}>
+        Copyright &copy; 2016 DEMO Streaming. All Rights Reserved.
+      </div>
       <div className={styles.icons}>
-        <a href="https://github.com/pankod" target="_blank">
+        <a href="https://www.facebook.com/"  >
           <Image
-            src="/icons/github-icon.svg"
-            alt="github"
-            width="28"
-            height="29"
+            src="/icons/social/facebook-white.svg"
+            alt="facebook"
+            width="32"
+            height="32"
+            
           />
         </a>
-        <a href="https://twitter.com/PankodDev" target="_blank">
+        <a href="https://twitter.com/PankodDev" >
           <Image
-            src="/icons/twitter-icon.svg"
+            src="/icons/social/twitter-white.svg"
             alt="twitter"
             width="28"
             height="28"
           />
         </a>
-        <a
-          href="https://www.youtube.com/channel/UCBGOeQkv1XW3ptryLWlQbAQ"
-          target="_blank"
-        >
+        <a href="https://www.instagram.com/" >
           <Image
-            src="/icons/youtube-icon.svg"
-            alt="youtube"
+            src="/icons/social/instagram-white.svg"
+            alt="instagram"
             width="28"
-            height="29"
+            height="28"
           />
         </a>
-        <a
-          href="https://www.linkedin.com/company/pankod-yazilim-ve-danismanlik/"
-          target="_blank"
-        >
+        <span className={styles.placeholder}></span>
+        <a href="https://www.apple.com/store"  >
           <Image
-            src="/icons/linkedin-icon.svg"
-            alt="linkedin"
-            width="28"
-            height="32"
+            src="/icons/store/app-store.svg"
+            alt="Google Play"
+            width="128"
+            height="40"
+          />
+        </a>
+        <a href="https://play.google.com/" >
+          <Image
+            src="/icons/store/play-store.svg"
+            alt="Google Play"
+            width="128"
+            height="40"
+          />
+        </a>
+        <a href="https://www.microsoft.com/en-us/store/apps/windows" >
+          <Image
+            src="/icons/store/windows-store.svg"
+            alt="Windows Store"
+            width="128"
+            height="40"
           />
         </a>
       </div>
     </div>
-  );
+  </div>
 };
