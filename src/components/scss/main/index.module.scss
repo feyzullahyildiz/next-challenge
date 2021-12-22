@@ -4,6 +4,7 @@
   text-align: center;
   padding: 2rem 0;
   flex: 1;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, auto));
+  gap: 10px
 }
