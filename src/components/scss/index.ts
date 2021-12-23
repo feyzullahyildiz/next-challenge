@@ -3,3 +3,6 @@ export { Main } from "./main";
 export { Footer } from "./footer";
 export { TitleHeader } from "./title-header";
 export { ImageItemBox } from "./image-item-box";
+export { Search } from "./search";
+export { Grid } from "./grid";
+export { Row } from "./row";

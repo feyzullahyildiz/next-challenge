@@ -1,0 +1,18 @@
+.content {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    height: 36px;
+    user-select: none;
+}
+.input {
+    height: max-content;
+    height: 100%;
+    box-sizing: border-box;
+}
+.icon {
+    background-color: #017efe;
+    padding: 4px 18px;
+    box-sizing: border-box;
+    height: 100%;
+}

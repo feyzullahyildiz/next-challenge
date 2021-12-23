@@ -1,6 +1,11 @@
 import React from "react";
-
-import { Header, Main, Footer, TitleHeader, ImageItemBox } from "@components/scss";
+import {
+  Header,
+  Main,
+  Footer,
+  TitleHeader,
+  ImageItemBox
+} from "@components/scss";
 import Link from "next/link";
 
 const Home: React.FC = () => {
@@ -15,21 +20,23 @@ const Home: React.FC = () => {
       <Header />
       <TitleHeader title="Popular Titles" />
       <Main>
-        <Link href="/series" passHref>
-          <ImageItemBox title="Series"
-            width={80}
-            imageUrl="/icons/camera.png"
-            subtitle="Popular Series"
-          />
+        <div style={{ display: 'flex' }}>
+          <Link href="/series" passHref>
+            <ImageItemBox title="Series"
+              width={80}
+              imageUrl="/icons/camera.png"
+              subtitle="Popular Series"
+            />
 
-        </Link>
-        <Link href="/movies" passHref>
-          <ImageItemBox title="Movie"
-            width={80}
-            imageUrl="/icons/camera.png"
-            subtitle="Popular Movies"
-          />
-        </Link>
+          </Link>
+          <Link href="/movies" passHref>
+            <ImageItemBox title="Movie"
+              width={80}
+              imageUrl="/icons/camera.png"
+              subtitle="Popular Movies"
+            />
+          </Link>
+        </div>
       </Main>
       <Footer />
     </div>
