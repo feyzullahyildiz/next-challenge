@@ -6,3 +6,4 @@ export { ImageItemBox } from "./image-item-box";
 export { Search } from "./search";
 export { Grid } from "./grid";
 export { Row } from "./row";
+export { Filter } from "./filter";

@@ -29,7 +29,7 @@ const Home: React.FC = () => {
             />
 
           </Link>
-          <Link href="/movies" passHref>
+          <Link href="/movie" passHref>
             <ImageItemBox title="Movie"
               width={80}
               imageUrl="/icons/camera.png"

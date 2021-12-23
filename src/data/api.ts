@@ -1,8 +1,10 @@
 
 
+type SortType = 'title_desc' | 'title_asc' | 'year_desc' | 'year_asc'
 type Options = {
     search?: string | null;
     maxCount?: number;
+    sortType?: SortType
 }
 const makeItSlower = async<T>(p: Promise<T>, t = 450): Promise<T> => {
     const [res] = await Promise.all([
@@ -11,7 +13,23 @@ const makeItSlower = async<T>(p: Promise<T>, t = 450): Promise<T> => {
     ]);
     return res;
 }
-export const getData = async (programType: ProgramType, { search = null, maxCount = 21 }: Options): Promise<Entry[]> => {
+
+const getSortFunction = (sort: SortType): (a: Entry, b: Entry) => number => {
+    if (sort === 'title_asc') {
+        return (a, b) => a.title > b.title ? 1 : -1
+    }
+    if (sort === 'title_desc') {
+        return (a, b) => a.title > b.title ? -1 : 1
+    }
+    if (sort === 'year_asc') {
+        return (a, b) => a.releaseYear > b.releaseYear ? 1 : -1
+    }
+    if (sort === 'year_desc') {
+        return (a, b) => a.releaseYear > b.releaseYear ? -1 : 1
+    }
+    return (a, b) => 1;
+}
+export const getData = async (programType: ProgramType, { search = null, maxCount = 21, sortType = 'title_asc' }: Options): Promise<Entry[]> => {
     const res = await makeItSlower(import('./sample.json'))
         .then(a => a.default as EntryResponse);
 
@@ -22,7 +40,7 @@ export const getData = async (programType: ProgramType, { search = null, maxCoun
         raw = raw.filter(item => item.title.toLowerCase().includes(s));
     }
     return raw
-        .sort((a, b) => a.title > b.title ? 1 : -1)
+        .sort(getSortFunction(sortType))
         .filter(item => item.releaseYear >= 2010)
         .filter((_, i) => i < maxCount);
 };

@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 
-import { Header, Main, Footer, TitleHeader, ImageItemBox, Grid, Row, Search } from "@components/scss";
+import { Header, Main, Footer, TitleHeader, ImageItemBox, Search, Grid, Row, Filter } from "@components/scss";
+import { useQuery } from 'react-query'
 import { getData } from "src/data/api";
-import { useQuery } from "react-query";
-
-const Serie: React.FC = () => {
+import { useRouter } from "next/router";
+const Movie: React.FC = () => {
 
   const [searchValue, setSearchValue] = useState('');
-  const searchKey = searchValue.length >= 2 ? searchValue : null;
-  const info = useQuery(['movie', searchKey], () => getData('series', {
-    search: searchKey
-  }));
+  const [sortFilter, setSortFilter] = useState('title_asc')
 
+  const searchKey = searchValue.length >= 2 ? searchValue : null;
+
+  const router = useRouter()
+  const programType = router.query.programType === 'movie' ? 'movie' : 'series';
+
+  const info = useQuery([programType, searchKey, sortFilter], () => getData(programType, {
+    search: searchKey,
+    sortType: sortFilter as any
+  }));
+  const title = programType === 'movie' ? 'Popular Movies' : 'Popular Series'
   return (
     <div
       style={{
@@ -21,13 +28,13 @@ const Serie: React.FC = () => {
       }}
     >
       <Header />
-      <TitleHeader title="Popular Series" />
+      <TitleHeader title={title} />
       <Main>
         <Row justifyContent="space-between">
           <Search onChange={(e) => setSearchValue(e.target.value)} value={searchValue} />
           {info.isFetching && <span>Loading</span>}
           {info.isError && <span>Error</span>}
-          <div>Filter</div>
+          <Filter onChange={(e) => setSortFilter(e.target.value)} value={sortFilter} />
         </Row>
         <Grid>
           {info.isFetched && info.data!.map((item, i) =>
@@ -39,11 +46,10 @@ const Serie: React.FC = () => {
             />
           )}
         </Grid>
-
       </Main>
       <Footer />
     </div>
   );
 };
 
-export default Serie;
+export default Movie;
