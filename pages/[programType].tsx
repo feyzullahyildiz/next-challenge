@@ -1,23 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 
 import { Header, Main, Footer, TitleHeader, ImageItemBox, Search, Grid, Row, Filter } from "@components/scss";
-import { useQuery } from 'react-query'
-import { getData } from "src/data/api";
+import { getData, SortType } from "src/data/api";
 import { useRouter } from "next/router";
-const Movie: React.FC = () => {
+import { GetServerSideProps } from "next";
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 
-  const [searchValue, setSearchValue] = useState('');
-  const [sortFilter, setSortFilter] = useState('title_asc')
 
-  const searchKey = searchValue.length >= 2 ? searchValue : null;
+const getFixedQueryParam = (obj: { [key: string]: string | string[] } & any, key: string, defaultValue: any): string => {
+  const val = obj[key];
+  if (!val) {
+    return defaultValue;
+  }
+  if (Array.isArray(val)) {
+    if (val.length === 0) {
+      return defaultValue;
+    }
+    return val[0];
+  }
+  return val;
+}
 
-  const router = useRouter()
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const queryClient = new QueryClient()
+  const programType = context.query?.programType;
+  if (programType !== 'movie' && programType !== 'series') {
+    return { props: {} }
+  }
+  const sortFilter = getFixedQueryParam(context.query, 'sortFilter', 'title_asc') as SortType;
+  const search = getFixedQueryParam(context.query, 'search', null);
+  await queryClient.prefetchQuery(['programTypes', sortFilter, search],
+    () => getData(programType, {
+      sortType: sortFilter,
+      search
+    })
+  )
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  }
+}
+
+interface Props {
+  data: Entry[]
+}
+const Movie: React.FC<Props> = (props) => {
+  const router = useRouter();
+
+  const sortFilter = useMemo(() => {
+    return getFixedQueryParam(router.query, 'sortFilter', 'title_asc') as SortType
+  }, [router.query.sortFilter])
+
+
+  const setSortFilter = useCallback((val: string) => {
+    router.query.sortFilter = val;
+    router.push(router);
+  }, []);
+
+  const searchValueInQuery = useMemo(() => {
+    return getFixedQueryParam(router.query, 'search', null)
+  }, [router.query.search]);
+  const [searchValue, setSearchValue] = useState(searchValueInQuery);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      router.query.search = searchValue;
+      router.push(router);
+    }, 300);
+    return () => {
+      clearTimeout(timeoutId);
+    }
+  }, [searchValue]);
+
+
   const programType = router.query.programType === 'movie' ? 'movie' : 'series';
 
-  const info = useQuery([programType, searchKey, sortFilter], () => getData(programType, {
-    search: searchKey,
-    sortType: sortFilter as any
-  }));
+  const info = useQuery(
+    ['programTypes', sortFilter, searchValueInQuery],
+    () => getData(programType, { sortType: sortFilter, search: searchValueInQuery }),
+    { initialData: props.data }
+  );
   const title = programType === 'movie' ? 'Popular Movies' : 'Popular Series'
   return (
     <div

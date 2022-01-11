@@ -1,6 +1,6 @@
 
 
-type SortType = 'title_desc' | 'title_asc' | 'year_desc' | 'year_asc'
+export type SortType = 'title_desc' | 'title_asc' | 'year_desc' | 'year_asc'
 type Options = {
     search?: string | null;
     maxCount?: number;
