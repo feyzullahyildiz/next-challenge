@@ -10,14 +10,7 @@ import Link from "next/link";
 
 const Home: React.FC = () => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <Header />
+    <>
       <TitleHeader title="Popular Titles" />
       <Main>
         <div style={{ display: 'flex' }}>
@@ -38,8 +31,7 @@ const Home: React.FC = () => {
           </Link>
         </div>
       </Main>
-      <Footer />
-    </div>
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ type Options = {
     maxCount?: number;
     sortType?: SortType
 }
-const makeItSlower = async<T>(p: Promise<T>, t = 450): Promise<T> => {
+const makeItSlower = async<T>(p: Promise<T>, t = 50): Promise<T> => {
     const [res] = await Promise.all([
         p,
         new Promise((res) => setTimeout(res, t)),

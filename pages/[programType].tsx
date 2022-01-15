@@ -61,22 +61,27 @@ const Movie: React.FC<Props> = (props) => {
   }, []);
 
   const searchValueInQuery = useMemo(() => {
-    return getFixedQueryParam(router.query, 'search', null)
+    return getFixedQueryParam(router.query, 'search', '')
   }, [router.query.search]);
   const [searchValue, setSearchValue] = useState(searchValueInQuery);
 
+  
+  const programType = router.query.programType === 'movie' ? 'movie' : 'series';
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      router.query.search = searchValue;
-      router.push(router);
+      const url = `/${programType}`;
+      if(searchValue) {
+        router.push(`${url}?search=${searchValue}`);
+      } else {
+        router.push(url);
+      }
     }, 300);
     return () => {
       clearTimeout(timeoutId);
     }
   }, [searchValue]);
 
-
-  const programType = router.query.programType === 'movie' ? 'movie' : 'series';
 
   const info = useQuery(
     ['programTypes', sortFilter, searchValueInQuery],
@@ -85,14 +90,7 @@ const Movie: React.FC<Props> = (props) => {
   );
   const title = programType === 'movie' ? 'Popular Movies' : 'Popular Series'
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <Header />
+    <>
       <TitleHeader title={title} />
       <Main>
         <Row justifyContent="space-between">
@@ -112,8 +110,7 @@ const Movie: React.FC<Props> = (props) => {
           )}
         </Grid>
       </Main>
-      <Footer />
-    </div>
+    </>
   );
 };
 
