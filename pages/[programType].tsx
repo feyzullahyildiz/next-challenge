@@ -94,7 +94,7 @@ const Movie: React.FC = () => {
           {info.isFetched && info.data!.map((item, i) =>
             <ImageItemBox
               key={i}
-              clientSideImg
+              clientSideImg={false}
               imageUrl={item.images["Poster Art"].url}
               subtitle={item.title}
             />
