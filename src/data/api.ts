@@ -1,11 +1,7 @@
+import { QueryFunctionContext } from 'react-query';
 
 
 export type SortType = 'title_desc' | 'title_asc' | 'year_desc' | 'year_asc'
-type Options = {
-    search?: string | null;
-    maxCount?: number;
-    sortType?: SortType
-}
 const makeItSlower = async<T>(p: Promise<T>, t = 50): Promise<T> => {
     const [res] = await Promise.all([
         p,
@@ -29,8 +25,11 @@ const getSortFunction = (sort: SortType): (a: Entry, b: Entry) => number => {
     }
     return (a, b) => 1;
 }
-export const getData = async (programType: ProgramType, { search = null, maxCount = 21, sortType = 'title_asc' }: Options): Promise<Entry[]> => {
-    const res = await makeItSlower(import('./sample.json'))
+type getDataFunctionType = (context: QueryFunctionContext) => Promise<Entry[]>;
+export const getDataReactQueryFriendly: getDataFunctionType = async (context) => {
+    const maxCount = 21;
+    const [programType, sortType, search] = context.queryKey as [ProgramType, SortType, string];
+    const res = await makeItSlower(import('./sample.json'), 0)
         .then(a => a.default as EntryResponse);
 
     let raw = res.entries.filter(r => r.programType === programType);

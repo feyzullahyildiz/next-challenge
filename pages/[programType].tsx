@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 
 import { Header, Main, Footer, TitleHeader, ImageItemBox, Search, Grid, Row, Filter } from "@components/scss";
-import { getData, SortType } from "src/data/api";
+import { SortType, getDataReactQueryFriendly } from "src/data/api";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
-import { dehydrate, QueryClient, useQuery } from 'react-query';
+import { dehydrate, QueryClient, QueryFunctionContext, useQuery } from 'react-query';
 
 
 const getFixedQueryParam = (obj: { [key: string]: string | string[] } & any, key: string, defaultValue: any): string => {
@@ -29,14 +29,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { props: {} }
   }
   const sortFilter = getFixedQueryParam(context.query, 'sortFilter', 'title_asc') as SortType;
-  const search = getFixedQueryParam(context.query, 'search', null);
-  await queryClient.prefetchQuery(['programTypes', sortFilter, search],
-    () => getData(programType, {
-      sortType: sortFilter,
-      search
-    })
-  )
-
+  const search = getFixedQueryParam(context.query, 'search', '');
+  await queryClient.prefetchQuery([programType, sortFilter, search], getDataReactQueryFriendly)
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -44,10 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-interface Props {
-  data: Entry[]
-}
-const Movie: React.FC<Props> = (props) => {
+const Movie: React.FC = () => {
   const router = useRouter();
 
   const sortFilter = useMemo(() => {
@@ -65,16 +56,20 @@ const Movie: React.FC<Props> = (props) => {
   }, [router.query.search]);
   const [searchValue, setSearchValue] = useState(searchValueInQuery);
 
-  
+
   const programType = router.query.programType === 'movie' ? 'movie' : 'series';
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const url = `/${programType}`;
-      if(searchValue) {
-        router.push(`${url}?search=${searchValue}`);
+      if (searchValue) {
+        // I think, this is not the best way :(
+        // it logs on browser console `utils.js?e7ff:104 Unknown key passed via urlObject into url.format: components`
+        router.query.search = searchValue;
+        router.push(router);
       } else {
-        router.push(url);
+        // it is needed when search input cleared.
+        delete router.query.search;
+        router.push(router);
       }
     }, 300);
     return () => {
@@ -83,11 +78,7 @@ const Movie: React.FC<Props> = (props) => {
   }, [searchValue]);
 
 
-  const info = useQuery(
-    ['programTypes', sortFilter, searchValueInQuery],
-    () => getData(programType, { sortType: sortFilter, search: searchValueInQuery }),
-    { initialData: props.data }
-  );
+  const info = useQuery([programType, sortFilter, searchValueInQuery], getDataReactQueryFriendly);
   const title = programType === 'movie' ? 'Popular Movies' : 'Popular Series'
   return (
     <>
