@@ -1,5 +1,5 @@
 # next-pankod-challenge
-
+[Demo App](https://pankod.feyz.cf/)
 
 This project was generated with [superplate](https://github.com/pankod/superplate).
 
